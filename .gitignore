@@ -75,4 +75,5 @@ DerivedDataCache/*
 
 
 # Custom ignore files
-Content/*
+Content/
+.idea/
