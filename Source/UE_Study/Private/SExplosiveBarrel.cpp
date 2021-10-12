@@ -2,8 +2,8 @@
 
 
 #include "SExplosiveBarrel.h"
-
 #include "Kismet/KismetSystemLibrary.h"
+#include "PhysicsEngine/RadialForceComponent.h"
 
 // Sets default values
 ASExplosiveBarrel::ASExplosiveBarrel()

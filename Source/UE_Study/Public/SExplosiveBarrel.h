@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PhysicsEngine/RadialForceComponent.h"
 #include "SExplosiveBarrel.generated.h"
 
 class UStaticMeshComponent;

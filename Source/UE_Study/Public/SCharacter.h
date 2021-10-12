@@ -15,14 +15,15 @@ class UE_STUDY_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditAnywhere);
+	TSubclassOf<AActor> ProjectileClass;
+	
 public:
 	// Sets default values for this character's properties
 	ASCharacter();
 
 protected:
-	UPROPERTY(EditAnywhere);
-	TSubclassOf<AActor> ProjectileClass;
-	
 	UPROPERTY(VisibleAnywhere);
 	USpringArmComponent* SpringArmComp;
 	
