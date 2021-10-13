@@ -9,6 +9,7 @@
 class UStaticMeshComponent;
 class URadialForceComponent;
 
+
 UCLASS()
 class UE_STUDY_API ASExplosiveBarrel : public AActor
 {
@@ -19,7 +20,7 @@ public:
 	ASExplosiveBarrel();
 
 protected:
-	UPROPERTY(VisibleAnywhere);
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMeshComp;
 
 	UPROPERTY(VisibleAnywhere);
