@@ -37,7 +37,8 @@ void USInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void USInteractionComponent::PrimaryInteract() 
 {
-	constexpr float radius = 30.f;
+	constexpr float RADIUS = 30.f;
+	constexpr bool bDrawDebug = false;
 	
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
@@ -46,7 +47,7 @@ void USInteractionComponent::PrimaryInteract()
 	FRotator EyeRotation;	
 
 	FCollisionShape Shape;
-	Shape.SetSphere(radius);
+	Shape.SetSphere(RADIUS);
 	
 	GetOwner()->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 	FVector End = EyeLocation + (EyeRotation.Vector() * 1000);
@@ -54,8 +55,7 @@ void USInteractionComponent::PrimaryInteract()
 	TArray<FHitResult> Hits;
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, EyeLocation, End, FQuat::Identity, ObjectQueryParams, Shape);
 	FColor LineColor = bBlockingHit? FColor::Green : FColor::Red;
-	DrawDebugLine(GetWorld(), EyeLocation, End, LineColor,
-		false, 2.0f, 0, 2.0f);
+	if(bDrawDebug) DrawDebugLine(GetWorld(), EyeLocation, End, LineColor,false, 2.0f, 0, 2.0f);
 	
 	for(FHitResult Hit : Hits)
 	{
@@ -66,6 +66,6 @@ void USInteractionComponent::PrimaryInteract()
 			ISGameplayInterface::Execute_Interact(HitActor, MyPawn);
 		}
 
-		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, radius, 32, LineColor, false, 2.0f);
+		if(bDrawDebug) DrawDebugSphere(GetWorld(), Hit.ImpactPoint, RADIUS, 32, LineColor, false, 2.0f);
 	}	
 }

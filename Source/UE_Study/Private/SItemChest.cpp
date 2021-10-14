@@ -3,6 +3,8 @@
 
 #include "SItemChest.h"
 
+#include "Kismet/KismetSystemLibrary.h"
+
 // Sets default values
 ASItemChest::ASItemChest()
 {
@@ -22,6 +24,12 @@ void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
 	LidMesh->SetRelativeRotation(FRotator(TargetPitch, 0, 0));
 }
+
+void ASItemChest::TestFunction_Implementation()
+{
+	UE_LOG(LogTemp, Log, TEXT("Execute TestFunction"));
+}
+
 
 // Called when the game starts or when spawned
 void ASItemChest::BeginPlay()

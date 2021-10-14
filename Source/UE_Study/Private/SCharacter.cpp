@@ -3,6 +3,7 @@
 
 #include "SCharacter.h"
 #include "SInteractionComponent.h"
+// #include "SItemChest.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
@@ -67,11 +68,13 @@ void ASCharacter::PrimaryAttack_TimeElapsed()
 	FActorSpawnParameters SpawnParams;
 
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
 	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 }
 
 void ASCharacter::PrimaryInteract()
 {
+	// ASItemChest::Execute_TestFunction();
 	if(InteractionComp)
 	{
 		InteractionComp->PrimaryInteract();

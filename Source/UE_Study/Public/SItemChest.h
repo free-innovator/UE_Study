@@ -13,15 +13,17 @@ UCLASS()
 class UE_STUDY_API ASItemChest : public AActor, public ISGameplayInterface
 {
 	GENERATED_BODY()
-
-	
 	
 public:
 
 	UPROPERTY(EditAnywhere)
 	float TargetPitch;
 	
-	void Interact_Implementation(APawn* InstigatorPawn);
+	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
+
+	UFUNCTION(BlueprintNativeEvent)
+	void TestFunction();
+	static void TestFunction_Implementation();
 	
 	// Sets default values for this actor's properties
 	ASItemChest();
@@ -31,7 +33,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* LidMesh;
 	
 	// Called when the game starts or when spawned
