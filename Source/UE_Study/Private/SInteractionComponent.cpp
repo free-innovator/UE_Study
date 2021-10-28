@@ -38,10 +38,13 @@ void USInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 void USInteractionComponent::PrimaryInteract() 
 {
 	constexpr float RADIUS = 30.f;
-	constexpr bool bDrawDebug = false;
+	constexpr bool bDrawDebug = true;
 	
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+
+	FCollisionQueryParams QueryParams = FCollisionQueryParams::DefaultQueryParam;
+	QueryParams.AddIgnoredActor(GetOwner());
 	
 	FVector EyeLocation;
 	FRotator EyeRotation;	
@@ -53,7 +56,7 @@ void USInteractionComponent::PrimaryInteract()
 	FVector End = EyeLocation + (EyeRotation.Vector() * 1000);
 	
 	TArray<FHitResult> Hits;
-	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, EyeLocation, End, FQuat::Identity, ObjectQueryParams, Shape);
+	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, EyeLocation, End, FQuat::Identity, ObjectQueryParams, Shape, QueryParams);
 	FColor LineColor = bBlockingHit? FColor::Green : FColor::Red;
 	if(bDrawDebug) DrawDebugLine(GetWorld(), EyeLocation, End, LineColor,false, 2.0f, 0, 2.0f);
 	

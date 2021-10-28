@@ -20,10 +20,6 @@ public:
 	float TargetPitch;
 	
 	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
-
-	UFUNCTION(BlueprintNativeEvent)
-	void TestFunction();
-	static void TestFunction_Implementation();
 	
 	// Sets default values for this actor's properties
 	ASItemChest();

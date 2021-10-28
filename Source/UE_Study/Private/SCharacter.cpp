@@ -4,9 +4,11 @@
 #include "SCharacter.h"
 #include "SInteractionComponent.h"
 // #include "SItemChest.h"
+#include "SAttributeComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -22,6 +24,8 @@ ASCharacter::ASCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
+
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>("AttributeComp");
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -63,13 +67,26 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	const FTransform SpawnTM = FTransform(GetControlRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
+	if(ensure(ProjectileClass))
+	{
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		FVector CameraLocation = CameraComp->GetComponentLocation();
+		FVector AssistantLocation = CameraLocation + (CameraComp->GetForwardVector() * 10000.f);
+		
+		FHitResult HitResult;
+		FCollisionQueryParams QueryParams = FCollisionQueryParams::DefaultQueryParam;
+		QueryParams.AddIgnoredActor(this);
+		GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, AssistantLocation, ECollisionChannel::ECC_WorldDynamic, QueryParams);
 
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		FVector TargetLocation = (HitResult.bBlockingHit)? HitResult.Location : AssistantLocation;
+		FRotator SpawnRotation = UKismetMathLibrary::FindLookAtRotation(HandLocation, TargetLocation);
+		FTransform SpawnTM = FTransform(SpawnRotation, HandLocation);
+		FActorSpawnParameters SpawnParams;
+
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
+		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+	}
 }
 
 void ASCharacter::PrimaryInteract()
